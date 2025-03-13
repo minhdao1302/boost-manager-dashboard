@@ -63,6 +63,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
+				// Custom colors for the purple and yellow theme
+				purple: {
+					light: '#E5DEFF',
+					DEFAULT: '#9b87f5',
+					dark: '#6E59A5'
+				},
+				yellow: {
+					light: '#FEF7CD',
+					DEFAULT: '#FFD166',
+					dark: '#E3BB3C'
+				},
 				// Boost Manager custom colors
 				status: {
 					done: 'hsl(var(--status-done))',

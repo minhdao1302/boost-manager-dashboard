@@ -5,40 +5,40 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    --background: 260 45% 98%;
+    --foreground: 262 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 262 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 262 47% 11%;
 
-    --primary: 210 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 260 67% 75%;
+    --primary-foreground: 260 40% 98%;
 
-    --secondary: 210 25% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 48 96% 89%;
+    --secondary-foreground: 38 92% 38%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 260 40% 96%;
+    --muted-foreground: 260 16% 47%;
 
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 48 96% 89%;
+    --accent-foreground: 38 92% 38%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 260 40% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 210 100% 50%;
+    --border: 260 32% 91%;
+    --input: 260 32% 91%;
+    --ring: 260 67% 75%;
 
     --radius: 0.75rem;
 
     /* Status colors */
     --status-done: 148 60% 48%;
     --status-inprogress: 34 100% 50%;
-    --status-pending: 210 40% 60%;
+    --status-pending: 260 40% 60%;
     --status-issue: 0 84% 60%;
   }
 

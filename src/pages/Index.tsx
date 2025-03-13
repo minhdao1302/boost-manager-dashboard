@@ -4,7 +4,7 @@ import { Dashboard } from "@/components/Dashboard";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-light to-yellow-light">
       <Header />
       <main className="flex-1">
         <Dashboard />
