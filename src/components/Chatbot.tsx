@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Send, ChevronUp, MessageSquare, Mic, X, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -64,7 +63,8 @@ export const Chatbot = () => {
       let response = "";
       let shouldShowToast = false;
       let toastMessage = "";
-      let toastType: "success" | "info" | "warning" = "info";
+      // Fix here: Change type to match toast variants in shadcn
+      let toastType: "default" | "destructive" = "default";
       
       // Morning Check-In
       if (lowerMessage.includes("floor 2 status") || lowerMessage.includes("show me floor 2")) {
@@ -75,7 +75,7 @@ export const Chatbot = () => {
         response = "Order logged. 20 towels will be sent to Floor 2. Do you want me to notify the housekeeping attendants?";
         shouldShowToast = true;
         toastMessage = "Supply order logged and sent to procurement";
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       } 
       // Midday Review
       else if (lowerMessage.includes("how many rooms done") || lowerMessage.includes("rooms completed")) {
@@ -86,14 +86,14 @@ export const Chatbot = () => {
         response = "Maintenance request for Room 210 has been queued. John from maintenance has been notified and will attend within 30 minutes.";
         shouldShowToast = true;
         toastMessage = "Maintenance assigned to Room 210";
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       } 
       // Room Buying
       else if (lowerMessage.includes("bought room") || (lowerMessage.includes("maria") && lowerMessage.includes("215"))) {
         response = "Confirmed! Maria has picked up Room 215. I've updated her schedule and sent a notification. Would you like me to send a congratulatory message?";
         shouldShowToast = true;
         toastMessage = "Room 215 reassigned to Maria";
-        toastType = "info";
+        toastType = "default"; // Was "info", changed to "default"
       } 
       // Good job message
       else if (lowerMessage.includes("good job") || lowerMessage.includes("well done")) {
@@ -101,7 +101,7 @@ export const Chatbot = () => {
         response = `Message sent to ${attendant}: "Great work today! Keep it up!"`;
         shouldShowToast = true;
         toastMessage = `Motivational message sent to ${attendant}`;
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       }
       // PM Prep
       else if (lowerMessage.includes("suggest pm") || lowerMessage.includes("pm drop list")) {
@@ -112,7 +112,7 @@ export const Chatbot = () => {
         response = "Room 310 has been assigned to Sarah. I've updated her schedule and sent a notification. She has confirmed receipt and estimates completion by 3:45 PM.";
         shouldShowToast = true;
         toastMessage = "Room 310 assigned to Sarah";
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       }
       // Progress Check
       else if (lowerMessage.includes("update on 9") || lowerMessage.includes("9 am ras")) {
@@ -127,7 +127,7 @@ export const Chatbot = () => {
         response = "PM drop list for rooms 205 and 207 has been approved and locked in. I've notified the PM team lead who confirmed receipt. The PM schedule is now ready to be finalized.";
         shouldShowToast = true;
         toastMessage = "PM drop list approved for rooms 205 and 207";
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       }
       // Overtime Assessment
       else if (lowerMessage.includes("what's left") || lowerMessage.includes("after pm drop")) {
@@ -138,14 +138,14 @@ export const Chatbot = () => {
         response = "Overtime approved for Tom (Rooms 415-419) and Sarah (Rooms 501-505). They have confirmed availability and will stay until approximately 5:30 PM. Estimated additional cost: $85.";
         shouldShowToast = true;
         toastMessage = "Overtime approved for Tom and Sarah";
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       }
       // Schedule Finalize
       else if (lowerMessage.includes("finalize pm") || lowerMessage.includes("finalize schedule")) {
         response = "PM schedule has been finalized and distributed to all PM attendants. David and Nina have confirmed receipt and will start at 4:00 PM with rooms 205, 207, 301, 305, and 310.";
         shouldShowToast = true;
         toastMessage = "PM schedule finalized and distributed";
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       }
       // PM Kickoff
       else if (lowerMessage.includes("notify pm") || lowerMessage.includes("alert pm ras")) {
@@ -168,7 +168,7 @@ export const Chatbot = () => {
         response = "Excellent news! All 200 rooms have been completed. Final completion time: 5:45 PM. Would you like me to generate an end-of-day report with efficiency metrics?";
         shouldShowToast = true;
         toastMessage = "All 200 rooms completed successfully!";
-        toastType = "success";
+        toastType = "default"; // Was "success", changed to "default"
       }
       // Fallback responses
       else if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
@@ -191,9 +191,9 @@ export const Chatbot = () => {
       // Show toast notification if needed
       if (shouldShowToast) {
         toast({
-          title: toastType === "success" ? "Success" : toastType === "warning" ? "Warning" : "Information",
+          title: toastType === "default" ? "Success" : "Warning", // Fix comparison here
           description: toastMessage,
-          variant: toastType === "success" ? "default" : toastType === "warning" ? "destructive" : "default",
+          variant: toastType, // This now matches the expected variants
         });
       }
     }, Math.floor(Math.random() * 400) + 600); // Random delay between 600-1000ms
