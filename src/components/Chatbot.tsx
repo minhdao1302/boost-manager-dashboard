@@ -13,7 +13,7 @@ export const Chatbot = () => {
     {
       id: "welcome",
       role: "assistant",
-      content: "Hello Lisa, I'm your AI Coordinator. How can I assist you today?",
+      content: "Hello Lisa, I'm your AI Coordinator. How can I assist you today? You can ask me about room status, assign tasks, or manage your team.",
       timestamp: new Date(),
     },
   ]);
