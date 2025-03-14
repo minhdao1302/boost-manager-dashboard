@@ -8,7 +8,10 @@ import { Chatbot } from "./Chatbot";
 import { RAPopup } from "./RAPopup";
 import { ShiftSection } from "./ShiftSection";
 import { toast } from "@/components/ui/use-toast";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { FilterX, Clock, Users, BarChart3 } from "lucide-react";
 
 interface Attendant {
   id: string;
@@ -25,6 +28,12 @@ export const Dashboard = () => {
   const [overtimeWarning, setOvertimeWarning] = useState("Overtime Possibility Low");
   const [showTextSheet, setShowTextSheet] = useState(false);
   const [textMessage, setTextMessage] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [suggestions] = useState([
+    "Drop Room 205 to PM shift",
+    "Assign Room 415 to Tom",
+    "Check in with Sarah about progress"
+  ]);
 
   // Mock morning shift data
   const morningShift = {
@@ -64,6 +73,13 @@ export const Dashboard = () => {
           description: `${ra.name} has been assigned an additional room`,
         });
         break;
+      case 'adjust':
+        toast({
+          title: "Workload Adjustment",
+          description: `Adjusting workload for ${ra.name}`,
+        });
+        // In a real implementation, you might open a modal for adjusting rooms
+        break;
       default:
         break;
     }
@@ -94,7 +110,68 @@ export const Dashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-6 pb-20">
-      <div className="mb-4">
+      <div className="mb-6 space-y-4">
+        <div className="flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center space-x-2">
+            <Clock className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-medium">Shift Control</h2>
+          </div>
+          
+          <div className="inline-flex items-center rounded-md border border-input bg-white/60 backdrop-blur-sm">
+            <Button 
+              variant={activeFilter === "All" ? "default" : "ghost"} 
+              size="sm"
+              onClick={() => setActiveFilter("All")}
+              className="rounded-r-none"
+            >
+              All
+            </Button>
+            <Button 
+              variant={activeFilter === "Done" ? "default" : "ghost"} 
+              size="sm"
+              onClick={() => setActiveFilter("Done")}
+              className="rounded-none"
+            >
+              Done
+            </Button>
+            <Button 
+              variant={activeFilter === "In Progress" ? "default" : "ghost"} 
+              size="sm"
+              onClick={() => setActiveFilter("In Progress")}
+              className="rounded-none"
+            >
+              In Progress
+            </Button>
+            <Button 
+              variant={activeFilter === "Pending" ? "default" : "ghost"} 
+              size="sm"
+              onClick={() => setActiveFilter("Pending")}
+              className="rounded-l-none"
+            >
+              Pending
+            </Button>
+          </div>
+        </div>
+        
+        <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center space-x-2">
+              <BarChart3 className="h-4 w-4 text-blue-500" />
+              <h3 className="font-medium text-blue-700">AI Suggestions</h3>
+            </div>
+          </div>
+          <div className="space-y-1">
+            {suggestions.map((suggestion, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <p className="text-sm text-blue-800">{suggestion}</p>
+                <Button size="sm" variant="ghost" className="h-7 w-7 p-0">
+                  <FilterX className="h-4 w-4 text-blue-500" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+        
         <ShiftSection 
           shift={morningShift.name}
           time={morningShift.time}
@@ -130,26 +207,20 @@ export const Dashboard = () => {
             <SheetTitle>Text {selectedRA?.name}</SheetTitle>
           </SheetHeader>
           <div className="py-6 space-y-4">
-            <textarea 
+            <Textarea 
               value={textMessage}
               onChange={(e) => setTextMessage(e.target.value)}
               placeholder="Enter your message here..."
-              className="w-full h-32 p-2 border rounded"
+              className="min-h-32"
             />
-            <div className="flex justify-end space-x-2">
-              <button 
-                onClick={() => setShowTextSheet(false)}
-                className="px-4 py-2 bg-muted text-muted-foreground rounded"
-              >
+            <SheetFooter>
+              <Button variant="secondary" onClick={() => setShowTextSheet(false)}>
                 Cancel
-              </button>
-              <button 
-                onClick={handleSendText}
-                className="px-4 py-2 bg-primary text-primary-foreground rounded"
-              >
+              </Button>
+              <Button onClick={handleSendText}>
                 Send Message
-              </button>
-            </div>
+              </Button>
+            </SheetFooter>
           </div>
         </SheetContent>
       </Sheet>
