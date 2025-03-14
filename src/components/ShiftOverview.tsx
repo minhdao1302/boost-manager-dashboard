@@ -1,4 +1,3 @@
-
 import { BarChart3, Users } from "lucide-react";
 import { ProgressIndicator } from "./ProgressIndicator";
 import { cn } from "@/lib/utils";
@@ -7,6 +6,7 @@ interface Attendant {
   id: string;
   name: string;
   avatar?: string;
+  shift: string;
   roomsAssigned: number;
   roomsCompleted: number;
   performance?: "ahead" | "ontrack" | "behind";
@@ -21,7 +21,6 @@ interface ShiftData {
   completedRooms: number;
 }
 
-// Mock data for demonstration
 const mockShifts: ShiftData[] = [
   {
     id: "morning",
@@ -104,7 +103,7 @@ export const ShiftOverview = ({ onAttendantClick }: ShiftOverviewProps) => {
                 <div 
                   key={attendant.id}
                   className="flex items-center justify-between p-2 bg-white/50 rounded-lg border border-border/20 cursor-pointer hover:bg-white/70 transition-colors"
-                  onClick={() => onAttendantClick && onAttendantClick({ ...attendant, shift: shift.id })}
+                  onClick={() => onAttendantClick && onAttendantClick(attendant)}
                 >
                   <div className="flex items-center space-x-2">
                     <div className="relative">

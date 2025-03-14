@@ -88,6 +88,10 @@ export const Dashboard = () => {
     }
   };
 
+  const handleAttendantClick = (attendant: Attendant) => {
+    setSelectedRA(attendant);
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 pb-20">
       <div className="mb-4">
@@ -108,7 +112,7 @@ export const Dashboard = () => {
           <IssueTracker />
         </div>
         <div className="space-y-6">
-          <ShiftOverview onAttendantClick={setSelectedRA} />
+          <ShiftOverview onAttendantClick={handleAttendantClick} />
           <PMSchedule />
         </div>
       </div>
