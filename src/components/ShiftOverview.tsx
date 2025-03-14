@@ -61,7 +61,11 @@ const mockShifts: ShiftData[] = [
   },
 ];
 
-export const ShiftOverview = () => {
+interface ShiftOverviewProps {
+  onAttendantClick?: (attendant: Attendant) => void;
+}
+
+export const ShiftOverview = ({ onAttendantClick }: ShiftOverviewProps) => {
   return (
     <div className="space-y-4 animate-fade-in bg-white/30 backdrop-blur-md rounded-xl p-4 border border-border/20 shadow-sm">
       <div className="flex items-center justify-between">
@@ -99,7 +103,8 @@ export const ShiftOverview = () => {
               {shift.attendants.slice(0, 4).map((attendant) => (
                 <div 
                   key={attendant.id}
-                  className="flex items-center justify-between p-2 bg-white/50 rounded-lg border border-border/20"
+                  className="flex items-center justify-between p-2 bg-white/50 rounded-lg border border-border/20 cursor-pointer hover:bg-white/70 transition-colors"
+                  onClick={() => onAttendantClick && onAttendantClick({ ...attendant, shift: shift.id })}
                 >
                   <div className="flex items-center space-x-2">
                     <div className="relative">
