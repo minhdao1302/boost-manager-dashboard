@@ -1,3 +1,4 @@
+
 import { BarChart3, Users } from "lucide-react";
 import { ProgressIndicator } from "./ProgressIndicator";
 import { cn } from "@/lib/utils";
@@ -27,10 +28,10 @@ const mockShifts: ShiftData[] = [
     name: "Morning",
     time: "8:00 AM",
     attendants: [
-      { id: "1", name: "Maria", roomsAssigned: 15, roomsCompleted: 12, performance: "ahead" },
-      { id: "2", name: "Tom", roomsAssigned: 15, roomsCompleted: 10, performance: "ontrack" },
-      { id: "3", name: "Sarah", roomsAssigned: 15, roomsCompleted: 7, performance: "behind" },
-      { id: "4", name: "John", roomsAssigned: 15, roomsCompleted: 11, performance: "ontrack" },
+      { id: "1", name: "Maria", shift: "8AM", roomsAssigned: 15, roomsCompleted: 12, performance: "ahead" },
+      { id: "2", name: "Tom", shift: "8AM", roomsAssigned: 15, roomsCompleted: 10, performance: "ontrack" },
+      { id: "3", name: "Sarah", shift: "8AM", roomsAssigned: 15, roomsCompleted: 7, performance: "behind" },
+      { id: "4", name: "John", shift: "8AM", roomsAssigned: 15, roomsCompleted: 11, performance: "ontrack" },
     ],
     totalRooms: 60,
     completedRooms: 40,
@@ -40,9 +41,9 @@ const mockShifts: ShiftData[] = [
     name: "Day",
     time: "9:00 AM",
     attendants: [
-      { id: "5", name: "Lisa", roomsAssigned: 15, roomsCompleted: 8, performance: "ontrack" },
-      { id: "6", name: "Alex", roomsAssigned: 15, roomsCompleted: 6, performance: "behind" },
-      { id: "7", name: "Emma", roomsAssigned: 15, roomsCompleted: 9, performance: "ontrack" },
+      { id: "5", name: "Lisa", shift: "9AM", roomsAssigned: 15, roomsCompleted: 8, performance: "ontrack" },
+      { id: "6", name: "Alex", shift: "9AM", roomsAssigned: 15, roomsCompleted: 6, performance: "behind" },
+      { id: "7", name: "Emma", shift: "9AM", roomsAssigned: 15, roomsCompleted: 9, performance: "ontrack" },
     ],
     totalRooms: 45,
     completedRooms: 23,
@@ -52,8 +53,8 @@ const mockShifts: ShiftData[] = [
     name: "PM",
     time: "4:00 PM",
     attendants: [
-      { id: "8", name: "David", roomsAssigned: 10, roomsCompleted: 0, performance: "ontrack" },
-      { id: "9", name: "Nina", roomsAssigned: 10, roomsCompleted: 0, performance: "ontrack" },
+      { id: "8", name: "David", shift: "4PM", roomsAssigned: 10, roomsCompleted: 0, performance: "ontrack" },
+      { id: "9", name: "Nina", shift: "4PM", roomsAssigned: 10, roomsCompleted: 0, performance: "ontrack" },
     ],
     totalRooms: 20,
     completedRooms: 0,
