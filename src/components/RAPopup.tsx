@@ -44,7 +44,7 @@ export const RAPopup = ({ ra, isOpen, onClose, onAction }: RAPopupProps) => {
         if (randomAction === "buy") {
           setAiAction(`Buy Room ${roomNumber}`);
         } else if (randomAction === "chat") {
-          setAiAction("Chat with AI");
+          setAiAction("Chat with Boost");
         } else if (randomAction === "text") {
           setAiAction("Text RA");
         } else {
@@ -68,7 +68,7 @@ export const RAPopup = ({ ra, isOpen, onClose, onAction }: RAPopupProps) => {
   const handleAiAction = () => {
     if (aiAction.startsWith("Buy Room")) {
       onAction('buy', ra);
-    } else if (aiAction === "Chat with AI") {
+    } else if (aiAction === "Chat with Boost") {
       onAction('chat', ra);
     } else if (aiAction === "Text RA") {
       onAction('text', ra);
@@ -116,7 +116,7 @@ export const RAPopup = ({ ra, isOpen, onClose, onAction }: RAPopupProps) => {
                 variant="outline"
               >
                 <MessageSquare className="h-4 w-4" />
-                Chat with AI
+                Chat with Boost
               </Button>
               <Button 
                 onClick={() => onAction('text', ra)} 

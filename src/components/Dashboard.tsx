@@ -6,6 +6,8 @@ import { IssueTracker } from "./IssueTracker";
 import { PMSchedule } from "./PMSchedule";
 import { Chatbot } from "./Chatbot";
 import { RAPopup } from "./RAPopup";
+import { RoomPopup } from "./RoomPopup";
+import { PMShiftPopup } from "./PMShiftPopup";
 import { ShiftSection } from "./ShiftSection";
 import { toast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
@@ -22,8 +24,20 @@ interface Attendant {
   performance?: "ahead" | "ontrack" | "behind";
 }
 
+interface Room {
+  roomNumber: string;
+  status: "done" | "inprogress" | "pending" | "issue";
+  attendant?: string;
+  updatedAt?: string;
+  issues?: { type: string, description: string }[];
+  eta?: string;
+  notes?: string;
+}
+
 export const Dashboard = () => {
   const [selectedRA, setSelectedRA] = useState<Attendant | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [isPMShiftPopupOpen, setIsPMShiftPopupOpen] = useState(false);
   const [showShiftOptions, setShowShiftOptions] = useState(false);
   const [overtimeWarning, setOvertimeWarning] = useState("Overtime Possibility Low");
   const [showTextSheet, setShowTextSheet] = useState(false);
@@ -60,8 +74,8 @@ export const Dashboard = () => {
     switch (action) {
       case 'chat':
         toast({
-          title: "Chat with AI",
-          description: `Opening AI chat about ${ra.name}`,
+          title: "Chat with Boost",
+          description: `Opening Boost chat about ${ra.name}`,
         });
         break;
       case 'text':
@@ -85,7 +99,71 @@ export const Dashboard = () => {
           title: "Workload Adjustment",
           description: `Adjusting workload for ${ra.name}`,
         });
-        // In a real implementation, you might open a modal for adjusting rooms
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleRoomAction = (action: string, room: Room) => {
+    switch (action) {
+      case 'suggest':
+        toast({
+          title: "AI Suggestion",
+          description: `Assign Room ${room.roomNumber} to Maria`,
+        });
+        break;
+      case 'drop':
+        toast({
+          title: "Room Dropped",
+          description: `Room ${room.roomNumber} has been dropped to PM shift`,
+        });
+        break;
+      case 'block':
+        toast({
+          title: "Room Blocked",
+          description: `Room ${room.roomNumber} has been blocked`,
+          variant: "destructive"
+        });
+        break;
+      case 'stop':
+        toast({
+          title: "Work Stopped",
+          description: `Work on Room ${room.roomNumber} has been stopped`,
+          variant: "destructive"
+        });
+        break;
+      default:
+        break;
+    }
+    setSelectedRoom(null);
+  };
+
+  const handlePMShiftAction = (action: string, shift: string, data?: any) => {
+    switch (action) {
+      case 'chat':
+        toast({
+          title: "Chat with Boost",
+          description: `Opening Boost chat about PM shift`,
+        });
+        break;
+      case 'modify':
+        if (data?.subAction === 'add' && data?.roomNumber) {
+          toast({
+            title: "Room Added",
+            description: `Room ${data.roomNumber} added to PM shift`,
+          });
+        } else if (data?.subAction === 'remove' && data?.roomNumber) {
+          toast({
+            title: "Room Removed",
+            description: `Room ${data.roomNumber} removed from PM shift`,
+          });
+        } else if (data?.subAction === 'eta' && data?.etaTime) {
+          toast({
+            title: "ETA Updated",
+            description: `PM shift ETA updated to ${data.etaTime}`,
+          });
+        }
         break;
       default:
         break;
@@ -113,6 +191,10 @@ export const Dashboard = () => {
 
   const handleAttendantClick = (attendant: Attendant) => {
     setSelectedRA(attendant);
+  };
+
+  const handleRoomClick = (room: Room) => {
+    setSelectedRoom(room);
   };
 
   const handleSuggestionClick = () => {
@@ -193,12 +275,12 @@ export const Dashboard = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <RoomStatus />
+          <RoomStatus onRoomClick={handleRoomClick} />
           <IssueTracker />
         </div>
         <div className="space-y-6">
           <ShiftOverview onAttendantClick={handleAttendantClick} />
-          <PMSchedule />
+          <PMSchedule onPMClick={() => setIsPMShiftPopupOpen(true)} />
         </div>
       </div>
       
@@ -207,6 +289,19 @@ export const Dashboard = () => {
         isOpen={!!selectedRA}
         onClose={() => setSelectedRA(null)}
         onAction={handleRAAction}
+      />
+      
+      <RoomPopup
+        room={selectedRoom}
+        isOpen={!!selectedRoom}
+        onClose={() => setSelectedRoom(null)}
+        onAction={handleRoomAction}
+      />
+      
+      <PMShiftPopup
+        isOpen={isPMShiftPopupOpen}
+        onClose={() => setIsPMShiftPopupOpen(false)}
+        onAction={handlePMShiftAction}
       />
       
       <Sheet open={showTextSheet} onOpenChange={setShowTextSheet}>

@@ -20,7 +20,11 @@ const mockRooms = [
   { roomNumber: "206", status: "issue", attendant: "Maria", updatedAt: "10:00 AM", issues: [{ type: "maintenance", description: "Broken lamp" }] },
 ];
 
-export const RoomStatus = () => {
+interface RoomStatusProps {
+  onRoomClick?: (room: any) => void;
+}
+
+export const RoomStatus = ({ onRoomClick }: RoomStatusProps) => {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [filter, setFilter] = useState<RoomStatusType | "all">("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -150,19 +154,24 @@ export const RoomStatus = () => {
         view === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
       )}>
         {filteredRooms.map((room) => (
-          <RoomStatusCard
+          <div 
             key={room.roomNumber}
-            roomNumber={room.roomNumber}
-            status={room.status as RoomStatusType}
-            attendant={room.attendant}
-            updatedAt={room.updatedAt}
-            notes={room.notes}
-            issues={room.issues}
-            eta={room.eta}
-            className={cn(
-              view === "list" ? "flex items-center justify-between" : ""
-            )}
-          />
+            onClick={() => onRoomClick && onRoomClick(room)}
+            className="cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            <RoomStatusCard
+              roomNumber={room.roomNumber}
+              status={room.status as RoomStatusType}
+              attendant={room.attendant}
+              updatedAt={room.updatedAt}
+              notes={room.notes}
+              issues={room.issues}
+              eta={room.eta}
+              className={cn(
+                view === "list" ? "flex items-center justify-between" : ""
+              )}
+            />
+          </div>
         ))}
         {filteredRooms.length === 0 && (
           <div className="col-span-full text-center py-8 text-muted-foreground">
