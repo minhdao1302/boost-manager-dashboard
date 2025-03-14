@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RoomStatus } from "./RoomStatus";
 import { ShiftOverview } from "./ShiftOverview";
 import { IssueTracker } from "./IssueTracker";
@@ -11,7 +11,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { FilterX, Clock, Users, BarChart3 } from "lucide-react";
+import { FilterX, Clock, Users, BarChart3, Sparkles } from "lucide-react";
 
 interface Attendant {
   id: string;
@@ -29,11 +29,18 @@ export const Dashboard = () => {
   const [showTextSheet, setShowTextSheet] = useState(false);
   const [textMessage, setTextMessage] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
-  const [suggestions] = useState([
+  const [suggestions, setSuggestions] = useState([
     "Drop Room 205 to PM shift",
     "Assign Room 415 to Tom",
     "Check in with Sarah about progress"
   ]);
+  const [aiPrimarySuggestion, setAiPrimarySuggestion] = useState("");
+
+  useEffect(() => {
+    // Simulate fetching AI primary suggestion
+    const suggestion = "Assign Room 415 to Tom now";
+    setAiPrimarySuggestion(suggestion);
+  }, []);
 
   // Mock morning shift data
   const morningShift = {
@@ -108,6 +115,13 @@ export const Dashboard = () => {
     setSelectedRA(attendant);
   };
 
+  const handleSuggestionClick = () => {
+    toast({
+      title: "Executing Suggestion",
+      description: aiPrimarySuggestion,
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 pb-20">
       <div className="mb-6 space-y-4">
@@ -153,24 +167,18 @@ export const Dashboard = () => {
           </div>
         </div>
         
-        <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-2">
-              <BarChart3 className="h-4 w-4 text-blue-500" />
-              <h3 className="font-medium text-blue-700">AI Suggestions</h3>
+        {aiPrimarySuggestion && (
+          <Button 
+            onClick={handleSuggestionClick}
+            className="w-full flex items-center justify-between bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 border border-blue-100 shadow-sm hover:from-blue-100 hover:to-purple-100"
+          >
+            <div className="flex items-center">
+              <Sparkles className="h-4 w-4 mr-2 text-blue-500" />
+              <span className="font-medium">AI Recommendation</span>
             </div>
-          </div>
-          <div className="space-y-1">
-            {suggestions.map((suggestion, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <p className="text-sm text-blue-800">{suggestion}</p>
-                <Button size="sm" variant="ghost" className="h-7 w-7 p-0">
-                  <FilterX className="h-4 w-4 text-blue-500" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
+            <span>{aiPrimarySuggestion}</span>
+          </Button>
+        )}
         
         <ShiftSection 
           shift={morningShift.name}

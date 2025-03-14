@@ -1,8 +1,8 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { CalendarPlus, ChevronDown, BarChart, Clock } from "lucide-react";
+import { CalendarPlus, ChevronDown, BarChart, Clock, AlertCircle } from "lucide-react";
 import { ProgressIndicator } from "./ProgressIndicator";
 import { Slider } from "@/components/ui/slider";
 
@@ -42,6 +42,19 @@ export const ShiftSection = ({
   const [stats, setStats] = useState<ShiftStats | null>(null);
   const [hours, setHours] = useState<number>(6); // Default shift length
   const [showStats, setShowStats] = useState(false);
+  const [predictedOvertime, setPredictedOvertime] = useState("0h");
+  
+  useEffect(() => {
+    // Simulate fetching AI-predicted overtime
+    const calculateOvertime = () => {
+      const capacity = attendants.length * 8; // 8 rooms per attendant
+      const extraRooms = Math.max(0, totalRooms - capacity);
+      const overtime = Math.ceil(extraRooms / (attendants.length * 1.33)); // 1.33 rooms/hour
+      setPredictedOvertime(`${overtime}h`);
+    };
+    
+    calculateOvertime();
+  }, [attendants.length, totalRooms]);
   
   const fetchStats = () => {
     // Simulate fetching shift stats
@@ -64,7 +77,16 @@ export const ShiftSection = ({
             <span className="font-medium">{shift} Shift</span>
             <span className="text-sm text-muted-foreground">{time} • {attendants.length} RAs</span>
           </div>
-          <ChevronDown className="h-4 w-4 opacity-50" />
+          <div className="flex items-center gap-2">
+            {parseInt(predictedOvertime) > 0 && (
+              <span className={`text-xs font-medium px-2 py-1 rounded ${
+                parseInt(predictedOvertime) > 1 ? 'bg-status-issue/10 text-status-issue' : 'bg-yellow-100 text-yellow-800'
+              }`}>
+                {predictedOvertime} overtime
+              </span>
+            )}
+            <ChevronDown className="h-4 w-4 opacity-50" />
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-md p-4">
@@ -137,12 +159,19 @@ export const ShiftSection = ({
             />
           </div>
           
-          <div className={`text-sm p-2 rounded ${
-            overtimeWarning.includes('Warning') 
+          <div className={`text-sm p-2 rounded flex items-center gap-2 ${
+            parseInt(predictedOvertime) > 1
               ? 'bg-status-issue/10 text-status-issue' 
-              : 'bg-yellow-light/50 text-yellow-dark'
+              : parseInt(predictedOvertime) > 0
+                ? 'bg-yellow-light/50 text-yellow-dark'
+                : 'bg-green-100 text-green-800'
           }`}>
-            {overtimeWarning || 'No overtime issues predicted'}
+            <AlertCircle className="h-4 w-4" />
+            {parseInt(predictedOvertime) > 1
+              ? `Warning: ${predictedOvertime} overtime likely with current workload`
+              : parseInt(predictedOvertime) > 0
+                ? `Light overtime possible: ${predictedOvertime}`
+                : 'No overtime issues predicted'}
           </div>
         </div>
       </PopoverContent>
